@@ -1,0 +1,20 @@
+{
+  "name": "sermon",
+  "version": "0.1.0",
+  "repository": "https://github.com/austindebruyn/sermon.js.git",
+  "description": "Test suites blessed by the almighty.",
+  "main": "index.js",
+  "dependencies": {
+    "expect": "^1.11.1",
+    "should": "^7.1.0",
+    "chai": "^3.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha ./tests"
+  },
+  "author": "Austin deBruyn",
+  "license": "ISC"
+}
