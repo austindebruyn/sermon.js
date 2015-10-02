@@ -10,18 +10,50 @@
         return new Commandment(thou);
     };
 
-    var verbs = [ 'shall', 'shalt', 'is' ];
-    var negatives = [ 'not', 'shant', 'shallNot', 'shaltNot' ];
+    var verbs = [ 'shall', 'shalt', 'is', 'are' ];
+    var negatives = [ 'not', 'shallNot', 'shaltNot', 'shant' ];
 
-    function Terminals () {
-    };
-    Terminals.prototype.be = function (obj) {
-        return obj === this.obj;
+    var satisfactory = function (thou, target) {
+        if ('undefined' === typeof target) {
+            return !!thou;
+        }
+        else if ('function' === typeof target) {
+            return !!target(thou);
+        }
+        else if ('string' === typeof thou && target instanceof RegExp) {
+            return !!thou.match(target);
+        }
+        else if ('string' === typeof target && thou instanceof RegExp) {
+            return !!target.match(thou);
+        }
+        else if (thou instanceof RegExp && target instanceof RegExp) {
+            return (
+                (thou.source === target.source) &&
+                (thou.global === target.global) && 
+                (thou.ignoreCase === target.ignoreCase) &&
+                (thou.multiline === target.multiline)
+            );
+        }
+        return thou === target;
     };
 
-    function Commandment (obj, invert) {
+    function Terminal () {
+    };
+    Terminal.prototype.be = 
+    Terminal.prototype.eq = 
+    Terminal.prototype.eql = 
+    Terminal.prototype.equals = 
+    Terminal.prototype.equal = 
+    Terminal.prototype.do = 
+    function (target) {
+        if ('function' === typeof target)
+            return !!(target(this.thou) || this.invert);
+        return satisfactory(this.thou, target) || this.invert;
+    };
+
+    function Commandment (thou, invert) {
         this.invert = !!invert;
-        this.obj = obj;
+        this.thou = thou;
 
         verbs.forEach(function (verb) {
             this[verb] = this;
@@ -35,7 +67,7 @@
             });
         }.bind(this));
     };
-    Commandment.prototype = Object.create(Terminals.prototype);
+    Commandment.prototype = Object.create(Terminal.prototype);
     Commandment.prototype.constructor = Commandment;
 
 })();
