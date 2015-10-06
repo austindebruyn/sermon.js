@@ -5,9 +5,10 @@
   "description": "Test suites blessed by the almighty.",
   "main": "index.js",
   "dependencies": {
+    "chai": "^3.3.0",
     "expect": "^1.11.1",
-    "should": "^7.1.0",
-    "chai": "^3.3.0"
+    "lodash": "^3.10.1",
+    "should": "^7.1.0"
   },
   "devDependencies": {
     "mocha": "^2.3.3"

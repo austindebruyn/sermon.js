@@ -20,6 +20,10 @@ describe('Thou', function () {
         });
     });
 
+});
+
+describe('#satisfactory', function () {
+
     describe('regular expressions', function () {
         it('should match regex and string', function () {
             expect( Thou('he3llo').shalt.be(/he\dllo/) ).toEqual(true);
@@ -29,6 +33,30 @@ describe('Thou', function () {
         it('should test equality', function () {
             //expect( Thou(/^\.abc[.+]!$/ig).shall.not.equal(/^\.abc[.+]!$/) ).toEqual(true);
             expect( Thou(/^\.abc[.+]!$/ig).shalt.equal(/^\.abc[.+]!$/ig) ).toEqual(true);
+        });
+    });
+
+    describe('arays', function () {
+        it('should iterate', function () {
+            expect( Thou([2, 3]).shalt.equal([2, 3]) ).toEqual(true);
+            expect( Thou([2, 3, 'a', /b6a$/]).shalt.be([2, 3, 'a', /b6a$/]) ).toEqual(true);
+            expect( Thou([2, 3, 'A', /b6a$/]).shalt.be([2, 3, 'a', /b6a$/]) ).toEqual(false);
+        });
+        it('should deep search', function () {
+            expect( Thou([2, [{key: 'val'}, 'a']]).shalt.equal([2, [{key: 'val'}, 'a']]) ).toEqual(true);
+            expect( Thou([[], [], [undefined]]).shalt.be([[], [], [[]]]) ).toEqual(false);
+        });
+    });
+
+    describe('objects', function () {
+        it('should iterate', function () {
+            expect( Thou({key: 'val', hey: [2, 3]}).shalt.be({key: 'val', hey: [2, 3]}) ).toEqual(true);
+            expect( Thou({key: 'a', hey: [1, 1, 1]}).shalt.be({key: 'a', hey: [1, [], 1]}) ).toEqual(false);
+        });
+        it('should dereference properties', function () {
+            expect( Thou({ age: 20 }).shalt.have('age').equal(20) ).toEqual(true);
+            expect( Thou({ h: /^okay$/, i: /^okaya$/ }).shalt.have('h').equal(/^okay$/) ).toEqual(true);
+            expect( Thou({}).shall.have('money').equal(100) ).toEqual(false);
         });
     });
 
