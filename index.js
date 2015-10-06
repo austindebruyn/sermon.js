@@ -113,7 +113,6 @@
     }
 
     verbs.forEach(function (key) {
-        console.log(key)
         Object.defineProperty(Thou, key, {
             get: function () {
                 return Thou();
