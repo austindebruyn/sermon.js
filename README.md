@@ -28,6 +28,10 @@ Thou(controller).shall.not.do(function callback(thou) { ... });
 Thou('he3llo').shalt.be(/he\dllo/);
 ```
 
+### Judgment
+Call `Judgment()` at the bottom of your test file to print the results
+of your commandment suite.
+
 ## Using with another test framework
 
 You can tell Sermon to throw errors instead of storing results or returning bools.
@@ -46,7 +50,8 @@ describe('addition', function () {
     })
 });
 
-# okay
-#   ✓ shoudl work
+# $ mocha some_mocha_test.js
+# addition
+#   ✓ should add big numbers
 # 1 passing (14ms)
 ```
