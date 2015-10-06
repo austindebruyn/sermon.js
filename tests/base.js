@@ -57,6 +57,7 @@ describe('#satisfactory', function () {
             expect( Thou({ age: 20 }).shalt.have('age').equal(20) ).toEqual(true);
             expect( Thou({ h: /^okay$/, i: /^okaya$/ }).shalt.have('h').equal(/^okay$/) ).toEqual(true);
             expect( Thou({}).shall.have('money').equal(100) ).toEqual(false);
+            expect( Thou({ money: 50 }).shalt.not.have('money').equal(100) ).toEqual(true);
         });
     });
 

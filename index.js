@@ -21,7 +21,7 @@
             return !!thou;
         }
         else if ('function' === typeof target) {
-            return !!target(thou);
+            return !!target.bind(thou)(thou);
         }
         else if ('string' === typeof thou && target instanceof RegExp) {
             return !!thou.match(target);
@@ -84,7 +84,7 @@
     Commandment.prototype = Object.create(Terminal.prototype);
     Commandment.prototype.constructor = Commandment;
     Commandment.prototype.have = function derefProperty (key) {
-        return new Commandment(this.thou[key]);
+        return new Commandment(this.thou[key], this.invert);
     };
 
     if ('undefined' !== typeof global) {
