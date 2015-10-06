@@ -15,9 +15,10 @@
     }
 
     var intros = [ 'AndTheLordSaidUnto', 'AndGodSaidUnto' ];
-    var verbs = [ 'shall', 'shalt', 'is', 'are', 'should' ];
+    var verbs = [ 'shall', 'shalt', 'is', 'are', 'should', 'that' ];
     var negatives = [ 'not', 'shallNot', 'shaltNot', 'shant', 'shouldNot' ];
-    var terminals = ['be', 'eq', 'eql', 'equal', 'equals', 'eqTo', 'eqlTo', 'equalTo', 'match', 'do'];
+    var terminals = ['be', 'is', 'eq', 'eql', 'equal', 'equals', 'eqTo',
+        'eqlTo', 'equalTo', 'match', 'matching', 'matches', 'do', 'does'];
 
     var satisfactory = function satisfactory (thou, target) {
         if ('undefined' === typeof target) {
