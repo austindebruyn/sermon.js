@@ -40,7 +40,7 @@ You can revert to the default mode with `Thou.shaltReturnBool()`.
 
 ### some_mocha_test.js
 ```
-var Thou = require('./index');
+var Thou = require('sermon');
 Thou.shaltThrowErrors();
 
 describe('addition', function () {
