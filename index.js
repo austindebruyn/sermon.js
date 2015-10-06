@@ -4,6 +4,8 @@
 
     var _ = require('lodash');
 
+    var mode = 'bool'
+
     var exports = module.exports = Thou;
 
     function Thou (thou) {
@@ -12,6 +14,7 @@
         return new Commandment(thou || Thou._subject || noSubject());
     }
 
+    var intros = [ 'AndTheLordSaidUnto', 'AndGodSaidUnto' ];
     var verbs = [ 'shall', 'shalt', 'is', 'are', 'should' ];
     var negatives = [ 'not', 'shallNot', 'shaltNot', 'shant', 'shouldNot' ];
     var terminals = ['be', 'eq', 'eql', 'equal', 'equals', 'eqTo', 'eqlTo', 'equalTo', 'match', 'do'];
@@ -50,7 +53,8 @@
     var terminal = function terminal (target) {
         if ('function' === typeof target)
             return !!(target(this.thou) || this.invert);
-        return satisfactory(this.thou, target) || this.invert;
+        var satisfiesCommandment = satisfactory(this.thou, target) || this.invert;
+        return evaluate(satisfiesCommandment);
     };
     var assignTerminalToKey = function assignTerminalToKey (key) {
         this[key] = terminal;
@@ -88,7 +92,14 @@
     };
 
     if ('undefined' !== typeof global) {
-        global.AndTheLordSaidUnto = setSubject;
+        intros.forEach(function (intro) {
+            if (global[intro]) {
+                console.warn('global.' + intro + ' already defined...');
+            }
+            else {
+                global[intro] = setSubject;
+            }
+        });
     }
 
     function setSubject (thou) {
@@ -109,5 +120,23 @@
             }
         });
     });
+
+    // Janky global setters.
+    exports.shaltThrowErrors = function () { mode = 'error'; }.bind(exports);
+    exports.shaltReturnBool  = function () { mode = 'bool'; }.bind(exports);
+
+    // Based on the mode sermon.js is running in, evaluate what to do
+    // with the passing/not-passing commandment by checking the
+    // mode we are running in.
+    var evaluate = function evaluate(satisfies, message) {
+        if (mode == 'bool') return satisfies;
+        if (mode == 'error' && !satisfies) {
+            throw new Error(message);
+        }
+    };
+
+    var Judgment = global.Judgment = function Judgment () {
+
+    };
 
 })();

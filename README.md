@@ -5,7 +5,8 @@ Test suites blessed by the almighty.
 
 ```
 #contact_test.js
-var austin = new Contact('Austin', { age: 20 });
+let Thou = require('sermon');
+let austin = new Contact('Austin', { age: 20 });
 
 AndTheLordSaidUnto(austin);
 
@@ -18,6 +19,8 @@ Thou.shalt.do(function () {
 
 ```
 #other_examples.js
+let Thou = require('sermon');
+
 Thou(3).shalt.be(1 + 2);
 Thou(controller).shall.not.do(function callback(thou) { ... });
 Thou('he3llo').shalt.be(/he\dllo/);

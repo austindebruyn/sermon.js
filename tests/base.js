@@ -31,7 +31,7 @@ describe('#satisfactory', function () {
             expect( Thou('he3llo').shalt.not.be(/he\dlla/) ).toEqual(true);
         });
         it('should test equality', function () {
-            //expect( Thou(/^\.abc[.+]!$/ig).shall.not.equal(/^\.abc[.+]!$/) ).toEqual(true);
+            expect( Thou(/^\.abc[.+]!$/ig).shall.not.equal(/^\.abc[.+]!$/) ).toEqual(true);
             expect( Thou(/^\.abc[.+]!$/ig).shalt.equal(/^\.abc[.+]!$/ig) ).toEqual(true);
         });
     });
