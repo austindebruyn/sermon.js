@@ -3,6 +3,7 @@
 (function () {
 
     var _ = require('lodash');
+    var util = require('util');
 
     var mode = 'bool'
 
@@ -55,14 +56,38 @@
         if ('function' === typeof target)
             return !!(target(this.thou) || this.invert);
         var satisfiesCommandment = satisfactory(this.thou, target) || this.invert;
-        return evaluate(satisfiesCommandment);
+        return evaluate(satisfiesCommandment, this.buildMessage(target));
     };
     var assignTerminalToKey = function assignTerminalToKey (key) {
         this[key] = terminal;
     };
     var Terminal = function Terminal () {};
-    terminals.forEach(assignTerminalToKey.bind(Terminal.prototype));
+    Terminal.prototype.buildMessage = function buildMessage (target) {
+        var msg = '';
+        msg += _(util.inspect(this.thou)).trunc(10);
+        msg += ' shalt ';
+        if (this.invert) msg += 'not '
+        switch (typeof target) {
+            case 'function':
+                msg += 'satisfy the given function.';
+                break;
+            case 'object':
+                msg += 'be equal to ' + _(util.inspect(target)).trunc(10) + '.';
+                break;
+            case 'string':
+                msg += 'be equal to "' + _(target).trunc(10) + '."';
+                break;
+            case 'number':
+                msg += 'be equal to ' + target + '.';
+                break;
+            default:
+                msg += 'be ' + _(util.inspect(target)).trunc(10);
+        }
 
+        return msg;
+    };
+
+    terminals.forEach(assignTerminalToKey.bind(Terminal.prototype));
     // This is special... we want to allow chaining to the end of
     // just the word 'be'... ie. shalt.be.equal where 'be' === a 
     // terminal, but so is 'equal'.
@@ -129,14 +154,35 @@
     // with the passing/not-passing commandment by checking the
     // mode we are running in.
     var evaluate = function evaluate(satisfies, message) {
-        if (mode == 'bool') return satisfies;
-        if (mode == 'error' && !satisfies) {
+
+        _tests.push({ pass: satisfies, message: message });
+
+        if (mode === 'bool') return satisfies;
+        if (mode === 'error' && !satisfies) {
             throw new Error(message);
         }
     };
 
-    var Judgment = global.Judgment = function Judgment () {
+    var _tests = [];
 
+    var Judgment = global.Judgment = function Judgment () {
+        if (Judgment.called) {
+            return console.warn('Don\'t call judgment twice!')
+        }
+        Judgment.called = true;
+        if (mode === 'error') {
+            console.warn('Judgment should really only be called in shaltReturnBool mode.');
+        }
+
+        var passing = _(_tests).reduce(function (count, test) {
+            return count + (test.pass ? 1 : 0);
+        }, 0);
+
+        console.log(passing + '/' + _tests.length + ' tests passed.');
+
+        _tests.forEach(function (test) {
+            console.log((test.pass ? 'PASS ' : 'FAIL ') + test.message);
+        });
     };
 
 })();

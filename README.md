@@ -17,8 +17,6 @@ Thou.shalt.do(function () {
 });
 ```
 
-## 
-
 ### other_examples.js
 ```
 let Thou = require('sermon');
