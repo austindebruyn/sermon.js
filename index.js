@@ -4,6 +4,7 @@
 
     var _ = require('lodash');
     var util = require('util');
+    require('colors');
 
     var mode = 'bool'
 
@@ -64,8 +65,7 @@
     var Terminal = function Terminal () {};
     Terminal.prototype.buildMessage = function buildMessage (target) {
         var msg = '';
-        msg += _(util.inspect(this.thou)).trunc(10);
-        msg += ' shalt ';
+        msg += 'Thou shalt ';
         if (this.invert) msg += 'not '
         switch (typeof target) {
             case 'function':
@@ -132,6 +132,8 @@
         if ('undefined' === typeof thou || null == thou)
             throw new Error('Thou cannot be ' + (typeof thou));
         Thou._subject = thou;
+        if (mode === 'judge')
+            _tests.push({ thou: thou });
     }
 
     function noSubject () {
@@ -149,18 +151,18 @@
     // Janky global setters.
     exports.shaltThrowErrors = function () { mode = 'error'; }.bind(exports);
     exports.shaltReturnBool  = function () { mode = 'bool'; }.bind(exports);
+    exports.shaltJudge  = function () { mode = 'judge'; }.bind(exports);
 
     // Based on the mode sermon.js is running in, evaluate what to do
     // with the passing/not-passing commandment by checking the
     // mode we are running in.
     var evaluate = function evaluate(satisfies, message) {
-
-        _tests.push({ pass: satisfies, message: message });
-
         if (mode === 'bool') return satisfies;
         if (mode === 'error' && !satisfies) {
             throw new Error(message);
         }
+        //if (mode === 'judge')
+        _tests.push({ pass: satisfies, message: message });
     };
 
     var _tests = [];
@@ -180,8 +182,23 @@
 
         console.log(passing + '/' + _tests.length + ' tests passed.');
 
+        var tokens = ['ଡ','ଢ','ଣ','ତ','ଦ','କ','ଚ','ଇ','ଊ'];
+        var sample = (array) => array[Math.floor(Math.random() * array.length)];
+        var i = 1;
+        var j = 0;
         _tests.forEach(function (test) {
-            console.log((test.pass ? 'PASS ' : 'FAIL ') + test.message);
+            if (test.thou) {
+                i = 1;
+                j++;
+                console.log((j == 1 ? 'The':'Then the') + ` lord said unto ${_(util.inspect(test.thou)).trunc(30).yellow}.`);
+            }
+            else if (test.pass) {
+                let token = sample(tokens);
+                console.log(`  ${`${i++}.`.grey} ${token.green}  ${test.message}`);
+            }
+            else {
+                console.log(`  ${`${i++}.`.grey}    ${test.message.red}`);
+            }
         });
     };
 
